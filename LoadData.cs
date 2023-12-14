@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -13,8 +8,6 @@ namespace WindowsFormsApp1
     public class LoadData
     {
         private SQLiteConnection connection;
-        private SQLiteDataAdapter dataAdapter;
-        private DataTable dataTable;
         private InitializeConnection initConn;
 
         public void LoadBookingHistoryData(DataGridView dataGridView)
@@ -23,11 +16,23 @@ namespace WindowsFormsApp1
             connection = initConn.InitializeDatabaseConnection();
             string query = "SELECT * FROM BookingHistory";
 
-            dataAdapter = new SQLiteDataAdapter(query, connection);
-            dataTable = new DataTable();
-            dataAdapter.Fill(dataTable);
+            SQLiteCommand command = new SQLiteCommand(query, connection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                dataGridView.Columns.Clear();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    dataGridView.Columns.Add(reader.GetName(i), reader.GetName(i));
+                }
 
-            dataGridView.DataSource = dataTable;
+                while (reader.Read())
+                {
+                    object[] rowData = new object[reader.FieldCount];
+                    reader.GetValues(rowData);
+                    dataGridView.Rows.Add(rowData);
+                }
+            }
         }
         public void LoadTrainTicketsData(DataGridView dataGridView)
         {
@@ -35,11 +40,23 @@ namespace WindowsFormsApp1
             connection = initConn.InitializeDatabaseConnection();
             string query = "SELECT * FROM Tickets";
 
-            dataAdapter = new SQLiteDataAdapter(query, connection);
-            dataTable = new DataTable();
-            dataAdapter.Fill(dataTable);
+            SQLiteCommand command = new SQLiteCommand(query, connection);
+            SQLiteDataReader reader = command.ExecuteReader();
+            if (reader.HasRows)
+            {
+                dataGridView.Columns.Clear();
+                for (int i = 0; i < reader.FieldCount; i++)
+                {
+                    dataGridView.Columns.Add(reader.GetName(i), reader.GetName(i));
+                }
 
-            dataGridView.DataSource = dataTable;
+                while (reader.Read())
+                {
+                    object[] rowData = new object[reader.FieldCount];
+                    reader.GetValues(rowData);
+                    dataGridView.Rows.Add(rowData);
+                }
+            }
         }
     }
 }
