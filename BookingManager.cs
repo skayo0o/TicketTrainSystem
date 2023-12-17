@@ -2,6 +2,8 @@
 using System.Data.SQLite;
 using System.Data;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace WindowsFormsApp1
 {
@@ -16,56 +18,32 @@ namespace WindowsFormsApp1
             dataAdapter.Fill(dataTable);
             return dataTable;
         }
-        public DataTable SearchTicketsByRouteAndDate(string pointOfDep, string pointOfArr, string depDate)
+        public IEnumerable<DataGridViewRow> SearchTicketsByRouteAndDate(DataGridView dataGridView, string pointOfDep, string pointOfArr, string depDate)
         {
-            initConn = new InitializeConnection(connection);
-            connection = initConn.InitializeDatabaseConnection();
-            string query = "SELECT * FROM Tickets WHERE PointOfDep = @PointOfDep AND PointOfArr = @PointOfArr AND DepDate = @DepDate";
-
-            SQLiteCommand command = new SQLiteCommand(query, connection);
-            command.Parameters.AddWithValue("@PointOfDep", pointOfDep);
-            command.Parameters.AddWithValue("@PointOfArr", pointOfArr);
-            command.Parameters.AddWithValue("@DepDate", depDate);
-
-            return CreateDataAdapter(command);
+            return dataGridView.Rows.Cast<DataGridViewRow>()
+                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep
+                    && Convert.ToString(row.Cells["PointOfArr"].Value) == pointOfArr
+                    && Convert.ToString(row.Cells["DepDate"].Value) == depDate);
         }
 
-        public DataTable SearchTicketsByRoute(string pointOfDep, string pointOfArr)
+        public IEnumerable<DataGridViewRow> SearchTicketsByRoute(DataGridView dataGridView, string pointOfDep, string pointOfArr)
         {
-            initConn = new InitializeConnection(connection);
-            connection = initConn.InitializeDatabaseConnection();
-            string query = "SELECT * FROM Tickets WHERE PointOfDep = @PointOfDep AND PointOfArr = @PointOfArr";
-
-            SQLiteCommand command = new SQLiteCommand(query, connection);
-            command.Parameters.AddWithValue("@PointOfDep", pointOfDep);
-            command.Parameters.AddWithValue("@PointOfArr", pointOfArr);
-
-            return CreateDataAdapter(command);
+            return dataGridView.Rows.Cast<DataGridViewRow>()
+                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep
+                    && Convert.ToString(row.Cells["PointOfArr"].Value) == pointOfArr);
         }
 
-        public DataTable SearchTicketsByDeparture(string pointOfDep)
+        public IEnumerable<DataGridViewRow> SearchTicketsByDeparture(DataGridView dataGridView, string pointOfDep)
         {
-            initConn = new InitializeConnection(connection);
-            connection = initConn.InitializeDatabaseConnection();
-            string query = "SELECT * FROM Tickets WHERE PointOfDep = @PointOfDep";
-
-            SQLiteCommand command = new SQLiteCommand(query, connection);
-            command.Parameters.AddWithValue("@PointOfDep", pointOfDep);
-
-            return CreateDataAdapter(command);
+            return dataGridView.Rows.Cast<DataGridViewRow>()
+                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep);
         }
 
-        public DataTable SearchTicketsByDepartureAndDate(string pointOfDep, string depDate)
+        public IEnumerable<DataGridViewRow> SearchTicketsByDepartureAndDate(DataGridView dataGridView, string pointOfDep, string depDate)
         {
-            initConn = new InitializeConnection(connection);
-            connection = initConn.InitializeDatabaseConnection();
-            string query = "SELECT * FROM Tickets WHERE PointOfDep = @PointOfDep AND DepDate = @DepDate";
-
-            SQLiteCommand command = new SQLiteCommand(query, connection);
-            command.Parameters.AddWithValue("@PointOfDep", pointOfDep);
-            command.Parameters.AddWithValue("@DepDate", depDate);
-
-            return CreateDataAdapter(command);
+            return dataGridView.Rows.Cast<DataGridViewRow>()
+                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep
+                    && Convert.ToString(row.Cells["DepDate"].Value) == depDate);
         }
 
         public bool ReserveTickets(string fullName, string passport, int amount, string email)

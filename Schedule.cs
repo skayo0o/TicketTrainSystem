@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Data;
-using System.Data.SQLite;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -37,24 +36,34 @@ namespace WindowsFormsApp1
 
             if (pointOfDep != "" && pointOfArr != "" && depDate != "  .  .")
             {
-                ScheduleView.DataSource = bookingManager.SearchTicketsByRouteAndDate(pointOfDep, pointOfArr, depDate);
+                var result = bookingManager.SearchTicketsByRouteAndDate(ScheduleView, pointOfDep, pointOfArr, depDate).ToList();
+                ScheduleView.Rows.Clear();
+                ScheduleView.Rows.AddRange(result.ToArray());
             }
             else if (pointOfDep != "" && pointOfArr != "" && depDate == "  .  .")
             {
-                ScheduleView.DataSource = bookingManager.SearchTicketsByRoute(pointOfDep, pointOfArr);
+                var result = bookingManager.SearchTicketsByRoute(ScheduleView, pointOfDep, pointOfArr).ToList();
+                ScheduleView.Rows.Clear();
+                ScheduleView.Rows.AddRange(result.ToArray());
             }
             else if (pointOfDep != "" && pointOfArr == "" && depDate == "  .  .")
             {
-                ScheduleView.DataSource = bookingManager.SearchTicketsByDeparture(pointOfDep);
+                var result = bookingManager.SearchTicketsByDeparture(ScheduleView, pointOfDep).ToList();
+                ScheduleView.Rows.Clear();
+                ScheduleView.Rows.AddRange(result.ToArray());
             }
             else if (pointOfDep != "" && pointOfArr == "" && depDate != "  .  .")
             {
-                ScheduleView.DataSource = bookingManager.SearchTicketsByDepartureAndDate(pointOfDep, depDate);
+                var result = bookingManager.SearchTicketsByDepartureAndDate(ScheduleView, pointOfDep, depDate).ToList();
+                ScheduleView.Rows.Clear();
+                ScheduleView.Rows.AddRange(result.ToArray());
             }
         }
 
         private void resetButton_Click(object sender, EventArgs e)
         {
+            ScheduleView.DataSource = null;
+            ScheduleView.Rows.Clear();
             loadData.LoadTrainTicketsData(ScheduleView);
         }
 

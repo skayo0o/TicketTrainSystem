@@ -31,7 +31,6 @@
             this.schedLoadButton = new System.Windows.Forms.Button();
             this.bookLoadButton = new System.Windows.Forms.Button();
             this.ScheduleView = new System.Windows.Forms.DataGridView();
-            this.updateButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ScheduleView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -62,22 +61,13 @@
             this.ScheduleView.Name = "ScheduleView";
             this.ScheduleView.Size = new System.Drawing.Size(776, 304);
             this.ScheduleView.TabIndex = 2;
-            // 
-            // updateButton
-            // 
-            this.updateButton.Location = new System.Drawing.Point(338, 44);
-            this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(124, 42);
-            this.updateButton.TabIndex = 3;
-            this.updateButton.Text = "Update Info";
-            this.updateButton.UseVisualStyleBackColor = true;
+            this.ScheduleView.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.DataGridView_CellValueChanged);
             // 
             // AdminForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.updateButton);
             this.Controls.Add(this.ScheduleView);
             this.Controls.Add(this.bookLoadButton);
             this.Controls.Add(this.schedLoadButton);
@@ -95,6 +85,5 @@
         private System.Windows.Forms.Button schedLoadButton;
         private System.Windows.Forms.Button bookLoadButton;
         private System.Windows.Forms.DataGridView ScheduleView;
-        private System.Windows.Forms.Button updateButton;
     }
 }
