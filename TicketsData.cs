@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using System.Windows.Forms;
 
 namespace WindowsFormsApp1
 {
@@ -71,6 +72,28 @@ namespace WindowsFormsApp1
             }
 
             return columns;
+        }
+        public List<Ticket> ReadTicketsFromDataGridView(DataGridView dataGridView)
+        {
+            List<Ticket> tickets = new List<Ticket>();
+
+            foreach (DataGridViewRow row in dataGridView.Rows)
+            {
+                Ticket ticket = new Ticket
+                {
+                    ID_Route = Convert.ToInt32(row.Cells["IDRoute"].Value),
+                    PointOfDep = Convert.ToString(row.Cells["PointOfDep"].Value),
+                    PointOfArr = Convert.ToString(row.Cells["PointOfArr"].Value),
+                    DepDate = Convert.ToString(row.Cells["DepDate"].Value),
+                    DepTime = Convert.ToString(row.Cells["DepTime"].Value),
+                    ArrDate = Convert.ToString(row.Cells["ArrDate"].Value),
+                    ArrTime = Convert.ToString(row.Cells["ArrTime"].Value),
+                    Seats = Convert.ToInt32(row.Cells["Seats"].Value)
+                };
+                tickets.Add(ticket);
+            }
+
+            return tickets;
         }
     }
 }

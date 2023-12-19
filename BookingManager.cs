@@ -4,6 +4,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Linq;
+using static WindowsFormsApp1.TicketsData;
 
 namespace WindowsFormsApp1
 {
@@ -11,32 +12,81 @@ namespace WindowsFormsApp1
     {
         private SQLiteConnection connection;
         private InitializeConnection initConn;
-        public IEnumerable<DataGridViewRow> SearchTicketsByRouteAndDate(DataGridView dataGridView, string pointOfDep, string pointOfArr, string depDate)
+        public void SearchTicketsByRouteAndDate(DataGridView dataGridView, List<Ticket> tickets, string pointOfDep, string pointOfArr, string depDate)
         {
-            return dataGridView.Rows.Cast<DataGridViewRow>()
-                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep
-                    && Convert.ToString(row.Cells["PointOfArr"].Value) == pointOfArr
-                    && Convert.ToString(row.Cells["DepDate"].Value) == depDate);
+            dataGridView.Rows.Clear();
+
+            IEnumerable<Ticket> result = tickets.Where(ticket => ticket.PointOfDep == pointOfDep
+                                            && ticket.PointOfArr == pointOfArr
+                                            && ticket.DepDate == depDate);
+
+            foreach (Ticket data in result)
+            {
+                object[] rowData = new object[data.GetType().GetProperties().Length];
+                int index = 0;
+                foreach (var prop in data.GetType().GetProperties())
+                {
+                    rowData[index] = prop.GetValue(data);
+                    index++;
+                }
+                dataGridView.Rows.Add(rowData);
+            }
         }
 
-        public IEnumerable<DataGridViewRow> SearchTicketsByRoute(DataGridView dataGridView, string pointOfDep, string pointOfArr)
+        public void SearchTicketsByRoute(DataGridView dataGridView, List<Ticket> tickets, string pointOfDep, string pointOfArr)
         {
-            return dataGridView.Rows.Cast<DataGridViewRow>()
-                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep
-                    && Convert.ToString(row.Cells["PointOfArr"].Value) == pointOfArr);
+            dataGridView.Rows.Clear();
+
+            IEnumerable<Ticket> result = tickets.Where(ticket => ticket.PointOfDep == pointOfDep
+                                            && ticket.PointOfArr == pointOfArr);
+            foreach (Ticket data in result)
+            {
+                object[] rowData = new object[data.GetType().GetProperties().Length];
+                int index = 0;
+                foreach (var prop in data.GetType().GetProperties())
+                {
+                    rowData[index] = prop.GetValue(data);
+                    index++;
+                }
+                dataGridView.Rows.Add(rowData);
+            }
         }
 
-        public IEnumerable<DataGridViewRow> SearchTicketsByDeparture(DataGridView dataGridView, string pointOfDep)
+        public void SearchTicketsByDeparture(DataGridView dataGridView, List<Ticket> tickets, string pointOfDep)
         {
-            return dataGridView.Rows.Cast<DataGridViewRow>()
-                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep);
+            dataGridView.Rows.Clear();
+
+            IEnumerable<Ticket> result = tickets.Where(ticket => ticket.PointOfDep == pointOfDep);
+            foreach (Ticket data in result)
+            {
+                object[] rowData = new object[data.GetType().GetProperties().Length];
+                int index = 0;
+                foreach (var prop in data.GetType().GetProperties())
+                {
+                    rowData[index] = prop.GetValue(data);
+                    index++;
+                }
+                dataGridView.Rows.Add(rowData);
+            }
         }
 
-        public IEnumerable<DataGridViewRow> SearchTicketsByDepartureAndDate(DataGridView dataGridView, string pointOfDep, string depDate)
+        public void SearchTicketsByDepartureAndDate(DataGridView dataGridView, List<Ticket> tickets, string pointOfDep, string depDate)
         {
-            return dataGridView.Rows.Cast<DataGridViewRow>()
-                .Where(row => Convert.ToString(row.Cells["PointOfDep"].Value) == pointOfDep
-                    && Convert.ToString(row.Cells["DepDate"].Value) == depDate);
+            dataGridView.Rows.Clear();
+
+            IEnumerable<Ticket> result = tickets.Where(ticket => ticket.PointOfDep == pointOfDep
+                                                            && ticket.DepDate == depDate);
+            foreach (Ticket data in result)
+            {
+                object[] rowData = new object[data.GetType().GetProperties().Length];
+                int index = 0;
+                foreach (var prop in data.GetType().GetProperties())
+                {
+                    rowData[index] = prop.GetValue(data);
+                    index++;
+                }
+                dataGridView.Rows.Add(rowData);
+            }
         }
 
         public bool ReserveTickets(string fullName, string passport, int amount, string email, int availableTickets, int idRoute)

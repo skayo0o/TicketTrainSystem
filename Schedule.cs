@@ -9,6 +9,7 @@ namespace WindowsFormsApp1
         private BookingManager bookingManager;
         private EmailManager emailManager;
         private LoadData loadData;
+        private TicketsData ticketsData;
 
         public LoadForm()
         {
@@ -33,30 +34,29 @@ namespace WindowsFormsApp1
             string pointOfDep = whereBox1.Text;
             string pointOfArr = whereBox2.Text;
             string depDate = maskedTextBox1.Text;
+            ticketsData = new TicketsData();
 
             if (pointOfDep != "" && pointOfArr != "" && depDate != "  .  .")
             {
-                var result = bookingManager.SearchTicketsByRouteAndDate(ScheduleView, pointOfDep, pointOfArr, depDate).ToList();
-                ScheduleView.Rows.Clear();
-                ScheduleView.Rows.AddRange(result.ToArray());
+                var tickets = ticketsData.ReadTicketsFromDataGridView(ScheduleView);
+                bookingManager.SearchTicketsByRouteAndDate(ScheduleView, tickets, pointOfDep, pointOfArr, depDate);
             }
             else if (pointOfDep != "" && pointOfArr != "" && depDate == "  .  .")
             {
-                var result = bookingManager.SearchTicketsByRoute(ScheduleView, pointOfDep, pointOfArr).ToList();
-                ScheduleView.Rows.Clear();
-                ScheduleView.Rows.AddRange(result.ToArray());
+                var tickets = ticketsData.ReadTicketsFromDataGridView(ScheduleView);
+                bookingManager.SearchTicketsByRoute(ScheduleView, tickets, pointOfDep, pointOfArr);
+
             }
             else if (pointOfDep != "" && pointOfArr == "" && depDate == "  .  .")
             {
-                var result = bookingManager.SearchTicketsByDeparture(ScheduleView, pointOfDep).ToList();
-                ScheduleView.Rows.Clear();
-                ScheduleView.Rows.AddRange(result.ToArray());
+                var tickets = ticketsData.ReadTicketsFromDataGridView(ScheduleView);
+                bookingManager.SearchTicketsByDeparture(ScheduleView, tickets, pointOfDep);
+
             }
             else if (pointOfDep != "" && pointOfArr == "" && depDate != "  .  .")
             {
-                var result = bookingManager.SearchTicketsByDepartureAndDate(ScheduleView, pointOfDep, depDate).ToList();
-                ScheduleView.Rows.Clear();
-                ScheduleView.Rows.AddRange(result.ToArray());
+                var tickets = ticketsData.ReadTicketsFromDataGridView(ScheduleView);
+                bookingManager.SearchTicketsByDepartureAndDate(ScheduleView, tickets, pointOfDep, depDate);
             }
         }
 
