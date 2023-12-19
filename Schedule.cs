@@ -69,9 +69,11 @@ namespace WindowsFormsApp1
 
         private void bookButton_Click(object sender, EventArgs e)
         {
-            if (bookingManager.ReserveTickets(textBoxFullName.Text, textBoxPassport.Text, int.Parse(textBoxAmount.Text), textBoxEmail.Text))
+            int selectedRowIndex = ((LoadForm)Application.OpenForms["LoadForm"]).ScheduleView.SelectedCells[0].RowIndex,
+                idRoute = Convert.ToInt32(((LoadForm)Application.OpenForms["LoadForm"]).ScheduleView.Rows[selectedRowIndex].Cells["IDRoute"].Value),
+                availableTickets = Convert.ToInt32(((LoadForm)Application.OpenForms["LoadForm"]).ScheduleView.Rows[selectedRowIndex].Cells["Seats"].Value);
+            if (bookingManager.ReserveTickets(textBoxFullName.Text, textBoxPassport.Text, int.Parse(textBoxAmount.Text), textBoxEmail.Text, availableTickets, idRoute) && emailManager.SendConfirmationEmail(textBoxEmail.Text))
             {
-                emailManager.SendConfirmationEmail(textBoxEmail.Text);
                 MessageBox.Show("Билеты успешно забронированы и подтверждение отправлено на указанный адрес электронной почты!");
                 loadData.LoadTrainTicketsData(ScheduleView);
             }

@@ -1,61 +1,61 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
 using System.Windows.Forms;
-
+using static WindowsFormsApp1.BookingHistoryData;
+using static WindowsFormsApp1.TicketsData;
 namespace WindowsFormsApp1
 {
     public class LoadData
     {
-        private SQLiteConnection connection;
-        private InitializeConnection initConn;
+        private TicketsData ticketData;
+        private BookingHistoryData bookingHistoryData;
 
         public void LoadBookingHistoryData(DataGridView dataGridView)
         {
-            initConn = new InitializeConnection(connection);
-            connection = initConn.InitializeDatabaseConnection();
-            string query = "SELECT * FROM BookingHistory";
+            bookingHistoryData = new BookingHistoryData();
+            List<string> columns = bookingHistoryData.GetBookingHistoryColumns();
+            List<BookingHistory> bookingHistory = bookingHistoryData.GetBookingHistoryData();
 
-            SQLiteCommand command = new SQLiteCommand(query, connection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
+            dataGridView.Columns.Clear();
+            foreach (var column in columns)
             {
-                dataGridView.Columns.Clear();
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    dataGridView.Columns.Add(reader.GetName(i), reader.GetName(i));
-                }
-
-                while (reader.Read())
-                {
-                    object[] rowData = new object[reader.FieldCount];
-                    reader.GetValues(rowData);
-                    dataGridView.Rows.Add(rowData);
-                }
+                dataGridView.Columns.Add(column, column);
             }
+
+            foreach(var data in bookingHistory)
+            {
+                object[] rowData = new object[data.GetType().GetProperties().Length];
+                int index = 0;
+                foreach (var prop in data.GetType().GetProperties())
+                {
+                    rowData[index] = prop.GetValue(data);
+                    index++;
+                }
+                dataGridView.Rows.Add(rowData);
+            }
+
         }
         public void LoadTrainTicketsData(DataGridView dataGridView)
         {
-            initConn = new InitializeConnection(connection);
-            connection = initConn.InitializeDatabaseConnection();
-            string query = "SELECT * FROM Tickets";
+            ticketData = new TicketsData();
+            List<string> columns = ticketData.GetTicketColumns();
+            List<Ticket> trainTicketsData = ticketData.GetTicketData();
 
-            SQLiteCommand command = new SQLiteCommand(query, connection);
-            SQLiteDataReader reader = command.ExecuteReader();
-            if (reader.HasRows)
+            dataGridView.Columns.Clear();
+            foreach (var column in columns)
             {
-                dataGridView.Columns.Clear();
-                for (int i = 0; i < reader.FieldCount; i++)
-                {
-                    dataGridView.Columns.Add(reader.GetName(i), reader.GetName(i));
-                }
+                dataGridView.Columns.Add(column, column);
+            }
 
-                while (reader.Read())
+            foreach (var data in trainTicketsData)
+            {
+                object[] rowData = new object[data.GetType().GetProperties().Length];
+                int index = 0;
+                foreach (var prop in data.GetType().GetProperties())
                 {
-                    object[] rowData = new object[reader.FieldCount];
-                    reader.GetValues(rowData);
-                    dataGridView.Rows.Add(rowData);
+                    rowData[index] = prop.GetValue(data);
+                    index++;
                 }
+                dataGridView.Rows.Add(rowData);
             }
         }
     }

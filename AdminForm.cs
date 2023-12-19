@@ -36,7 +36,7 @@ namespace WindowsFormsApp1
 
         private void DataGridView_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
-            initConn = new InitializeConnection(connection);
+            initConn = new InitializeConnection();
             connection = initConn.InitializeDatabaseConnection();
             var newValue = ScheduleView.Rows[e.RowIndex].Cells[e.ColumnIndex].Value.ToString();
             int id = int.Parse(ScheduleView.Rows[e.RowIndex].Cells["IDRoute"].Value.ToString());

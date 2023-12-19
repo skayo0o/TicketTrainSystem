@@ -92,6 +92,7 @@
     <Compile Include="AdmPanelAuth.Designer.cs">
       <DependentUpon>AdmPanelAuth.cs</DependentUpon>
     </Compile>
+    <Compile Include="BookingHistoryData.cs" />
     <Compile Include="BookingManager.cs" />
     <Compile Include="EmailManager.cs" />
     <Compile Include="InitializeConnection.cs" />
@@ -104,6 +105,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TicketsData.cs" />
     <EmbeddedResource Include="AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>

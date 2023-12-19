@@ -11,13 +11,6 @@ namespace WindowsFormsApp1
     {
         private SQLiteConnection connection;
         private InitializeConnection initConn;
-        public DataTable CreateDataAdapter(SQLiteCommand command)
-        {
-            SQLiteDataAdapter dataAdapter = new SQLiteDataAdapter(command);
-            DataTable dataTable = new DataTable();
-            dataAdapter.Fill(dataTable);
-            return dataTable;
-        }
         public IEnumerable<DataGridViewRow> SearchTicketsByRouteAndDate(DataGridView dataGridView, string pointOfDep, string pointOfArr, string depDate)
         {
             return dataGridView.Rows.Cast<DataGridViewRow>()
@@ -46,17 +39,18 @@ namespace WindowsFormsApp1
                     && Convert.ToString(row.Cells["DepDate"].Value) == depDate);
         }
 
-        public bool ReserveTickets(string fullName, string passport, int amount, string email)
+        public bool ReserveTickets(string fullName, string passport, int amount, string email, int availableTickets, int idRoute)
         {
-            initConn = new InitializeConnection(connection);
+            initConn = new InitializeConnection();
             connection = initConn.InitializeDatabaseConnection();
+
             if (string.IsNullOrEmpty(fullName))
             {
                 MessageBox.Show("Введите ФИО!");
                 return false;
             }
 
-            if (passport.Length > 6)
+            if (passport.Length > 6 && passport.Length < 6)
             {
                 MessageBox.Show("Номер паспорта не должен превышать 6 символов!");
                 return false;
@@ -68,14 +62,15 @@ namespace WindowsFormsApp1
                 return false;
             }
 
-            int selectedRowIndex = ((LoadForm)Application.OpenForms["LoadForm"]).ScheduleView.SelectedCells[0].RowIndex;
-            int idRoute = Convert.ToInt32(((LoadForm)Application.OpenForms["LoadForm"]).ScheduleView.Rows[selectedRowIndex].Cells["IDRoute"].Value);
-
-            int availableTickets = Convert.ToInt32(((LoadForm)Application.OpenForms["LoadForm"]).ScheduleView.Rows[selectedRowIndex].Cells["Seats"].Value);
-
             if (amount > availableTickets)
             {
                 MessageBox.Show("Отсутствует указанное кол-во билетов на рейс!");
+                return false;
+            }
+
+            if (amount < 1) 
+            {
+                MessageBox.Show("Кол-во билетов > 0!");
                 return false;
             }
 
@@ -99,5 +94,6 @@ namespace WindowsFormsApp1
 
             return true;
         }
+
     }
 }

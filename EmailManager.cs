@@ -9,10 +9,10 @@ namespace WindowsFormsApp1
     {
         private SQLiteConnection connection;
         private InitializeConnection initConn;
-
-        public void SendConfirmationEmail(string recipientEmail)
+        
+        public bool SendConfirmationEmail(string recipientEmail)
         {
-            initConn = new InitializeConnection(connection);
+            initConn = new InitializeConnection();
             connection = initConn.InitializeDatabaseConnection();
             string smtpHost = "smtp.yandex.ru";
             int smtpPort = 587;
@@ -36,10 +36,12 @@ namespace WindowsFormsApp1
                         smtpClient.Credentials = new NetworkCredential(smtpUsername, smtpPassword);
                         smtpClient.EnableSsl = true;
                         smtpClient.Send(message);
+                        return true;
                     }
                     else
                     {
                         MessageBox.Show("Строка не найдена");
+                        return false;
                     }
                 }
             }
